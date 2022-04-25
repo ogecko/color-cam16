@@ -7,4 +7,6 @@ Perceptual Color Space and Language based on the CAM16 Uniform Color Space
 
 ## Color Space Analysis
 
+## Color Names
+
 ## Color Language
