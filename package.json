@@ -1,0 +1,9 @@
+{
+  "name": "color-cam16",
+  "version": "0.0.2",
+  "description": "Perceptual Color Space and Language based on the CAM16 Uniform Color Space",
+  "main": "src/index.ts",
+  "repository": "git@github.com:ogecko/color-cam16.git",
+  "author": "David Morrison <jdmorriso@gmail.com>",
+  "license": "MIT"
+}
