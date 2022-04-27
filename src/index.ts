@@ -3,4 +3,4 @@ export * from "./transform_fwd";
 export * from "./transform_rev";
 export * from "./analysis";
 export * from "./names";
-export * from "./language";
+export * from "./parser";

@@ -7,6 +7,7 @@
   "author": "David Morrison <jdmorriso@gmail.com>",
   "license": "MIT",
   "scripts": {
+    "build": "cd src; jison language.json",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage"
@@ -18,6 +19,7 @@
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.0.0",
     "jest": "27",
+    "jison": "^0.4.18",
     "prettier": "^2.6.2",
     "source-map-support": "^0.5.21",
     "ts-jest": "^27.1.4",

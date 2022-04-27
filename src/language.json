@@ -1,0 +1,114 @@
+{
+    "options": {
+        "moduleType": "default",
+        "moduleMain": true
+    },
+    "moduleInclude": "let identifiers={};",
+    "parseParams": ["cam16"],
+    "lex": {
+        "rules": [
+            ["\\s+", "/* skip whitespace */"],
+            [",",    "/* skip comma */"],
+            ["testcase", "return 'testcase';"],
+            ["lighter", "return 'lighter';"],
+            ["darker", "return 'darker';"],
+            ["shaded", "return 'shaded';"],
+            ["contrast", "return 'contrast';"],
+            ["stronger", "return 'stronger';"],
+            ["weaker", "return 'weaker';"],
+            ["warmer", "return 'warmer';"],
+            ["cooler", "return 'cooler';"],
+            ["complimented", "return 'complimented';"],
+            ["triadic", "return 'triadic';"],
+            ["tetradic", "return 'tetradic';"],
+            ["rainbow", "return 'rainbow';"],
+            ["1st", "return '1st';"],
+            ["2nd", "return '2nd';"],
+            ["3rd", "return '3rd';"],
+            ["hmj", "return 'hmj';"],
+            ["by", "return 'by';"],
+            ["to", "return 'to';"],
+            ["is", "return 'is';"],
+            ["and", "return 'and';"],
+            ["in", "return 'in';"],
+            ["steps?", "return 'steps';"],
+            ["\\(", "return '(';"],
+            ["\\)", "return ')';"],
+            ["\\.", "return '.';"],
+            [",", "return ',';"],
+            ["[+-]?[0-9]+(\\.[0-9]+)?", "return 'digits';"],
+            ["#[0-9a-fA-F]{6}", "return 'ColorHex';"],
+            ["[a-zA-Z][[a-zA-Z0-9]*", "return 'Identifier';"]
+        ]
+    },
+    "operators": [
+        ["right", "AdjSequence"]
+    ],
+    "bnf": {
+        "Document": [ 
+            [ "StatementSequence", "return $1" ]
+        ],
+        "StatementSequence": [ 
+            [ "Statement", "$$ = $1" ],
+            [ "StatementSequence . Statement", "$$ = [...$1, ...$3]"]
+        ],
+        "Statement": [ 
+            [ "ColorSequence", "$$ = $1" ],
+            [ "Color", "$$ = [$1]" ],
+            [ "Assignment", "$$ = []" ],
+            [ "testcase Number", "$$ = $2" ],
+            [ "testcase Color", "$$ = $2" ],
+            [ "testcase Assignment", "$$ = identifiers" ]
+        ],
+        "Assignment": [
+            [ "Identifier is Color", "identifiers[$1] = $3; $$ = $3" ]
+        ],
+        "Number": [
+            [ "digits", "$$ = Number($1)" ]
+        ],
+        "Color": [
+            [ "Identifier", "$$ = identifiers[$1]" ],
+            [ "ColorHex", "$$ = cam16.hex_to_cam16_ucs_ingamut($1);" ],
+            [ "hmj ( Number Number Number )", "$$ = cam16.cam16_ucs_to_hex_ingamut({ Hu: $3, Mu: $4, Ju: $5 })" ],
+            [ "Color Adjustment","$$ = cam16.cam16_ucs_adjust($2, $1)[0];" ]
+        ],
+        "ColorSequence" :[
+            [ "Color AdjSequence","$$ = cam16.cam16_ucs_adjust($2, $1);" ],
+            [ "ColorSequence AdjSequence","$$ = cam16.cam16_ucs_adjust($2, ...$1);" ],
+            [ "rainbow in Number steps","$$ = cam16.cam16_ucs_rainbow({ steps: $3 });" ]
+        ],
+        "AdjSequence": [
+            ["Adjustment in Number steps", "$$ = {...$1, steps: $3 }"]
+        ],
+        "Adjustment" :[
+            [ "lighter","$$ = { Jub: +5 }" ],
+            [ "darker","$$ = { Jub: -5 }" ],
+            [ "shaded","$$ = { Jua: 0.95, Mua: 0.95 }" ],
+            [ "contrast","$$ = { Jub: +75, contrast: true }" ],
+            [ "stronger","$$ = { Mub: +5 }" ],
+            [ "weaker","$$ = { Mub: -5 }" ],
+            [ "warmer","$$ = { Hub: +5 }" ],
+            [ "cooler","$$ = { Hub: -5 }" ],
+            [ "1st triadic","$$ = { Hub: +120 }" ],
+            [ "2nd triadic","$$ = { Hub: +240 }" ],
+            [ "1st tetradic","$$ = { Hub: +90 }" ],
+            [ "2nd tetradic","$$ = { Hub: +180 }" ],
+            [ "3rd tetradic","$$ = { Hub: +270 }" ],
+            [ "lighter by Number","$$ = { Jub: +$3 }" ],
+            [ "darker by Number","$$ = { Jub: -$3 }" ],
+            [ "shaded by Number","$$ = { Jua: 1-$3/100, Mua: 1-$3/100 }" ],
+            [ "contrast by Number","$$ = { Jub: +$3, contrast: true }" ],
+            [ "stronger by Number","$$ = { Mub: +$3 }" ],
+            [ "weaker by Number","$$ = { Mub: -$3 }" ],
+            [ "warmer by Number","$$ = { Hub: +$3 }" ],
+            [ "cooler by Number","$$ = { Hub: -$3 }" ],
+            [ "lighter to Number","$$ = { Jua: 0, Jub: +$3 }" ],
+            [ "darker to Number","$$ = { Jua: 0, Jub: +$3 }" ],
+            [ "stronger to Number","$$ = { Mua: 0, Mub: +$3 }" ],
+            [ "weaker to Number","$$ = { Mua: 0, Mub: +$3 }" ],
+            [ "warmer to Number","$$ = { Hua: 0, Hub: +$3 }" ],
+            [ "cooler to Number","$$ = { Hua: 0, Hub: +$3 }" ],
+            [ "to Color","$$ = { Jua: 0, Jub: +$2.Ju, Mua: 0, Mub: +$2.Mu, Hua: 0, Hub: +$2.Hu }" ]
+        ]
+    }
+}
