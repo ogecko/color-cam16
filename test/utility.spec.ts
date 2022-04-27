@@ -1,20 +1,6 @@
 import { describe, expect, test } from '@jest/globals'
-import { fp, c360, lerp, h_to_Hu, Hu_to_h } from '../src/index'
-
-// key points of mapping equivalence between hue and uniform hue space
-const hHu_test_data = [
-    { Hu: 0, h: 20.14}, 
-    { Hu: 90, h: 90}, 
-    { Hu: 180, h: 164.25}, 
-    { Hu: 270, h: 237.52}, 
-    { Hu: 359, h: 19.08}, 
-    { Hu: 20, h: 37.34}, 
-    { Hu: 170, h: 153}, 
-    { Hu: 190, h: 171.16}, 
-    { Hu: 260, h: 227.97}, 
-    { Hu: 300, h: 298.65}, 
-]
-
+import { hHu_testdata, HuLabel_testdata } from './transform_testdata'
+import { fp, c360, lerp, h_to_Hu, Hu_to_h, Hu_to_label } from '../src/index'
 
 describe('Utility Functions', () => {
     test('fp should convert floating point to string with 2 decimals', () => {
@@ -40,17 +26,22 @@ describe('Utility Functions', () => {
     });
 
     test('h_to_Hu converts from hue to uniform hue space correctly', () => {
-        hHu_test_data.forEach(d => {
+        hHu_testdata.forEach(d => {
             expect(h_to_Hu(d.h).toFixed(1)).toEqual(d.Hu.toFixed(1))
         })
     });
 
     test('Hu_to_h converts from uniform hue space to hue correctly', () => {
-        hHu_test_data.forEach(d => {
+        hHu_testdata.forEach(d => {
             expect(Hu_to_h(d.Hu).toFixed(1)).toEqual(d.h.toFixed(1))
         })
     });
 
+    test('Hu_to_label converts from uniform hue space to hue correctly', () => {
+        HuLabel_testdata.forEach(d => {
+            expect(Hu_to_label(d.Hu)).toEqual(d.label)
+        })
+    });
 
 
 })

@@ -128,7 +128,7 @@ export function Hu_to_label(Hu:number): string {
  */
 export function JuMuHu_to_label(c:JuMuHu, precise=false): string {
     const divisor = precise ? 1 : 10
-    return Math.floor(c.Ju/divisor)+this.Hu_to_label(c.Hu)+Math.floor(c.Mu*2/divisor)
+    return Math.floor(c.Ju/divisor)+Hu_to_label(c.Hu)+Math.floor(c.Mu*2/divisor)
 }
 
 
