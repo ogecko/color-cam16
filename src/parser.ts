@@ -22,9 +22,9 @@ const cam16 = {
 // const parse = function (t:string, c:Cam16) { return theme_grammar.parse.apply(theme_grammar, [t, c]); };
 
 // OPTION 2 Buildtime generation of parse with command 'jison language.json'
-import { parse } from './language'
+import { parse as jison_parse } from './language'
 
-export function parse_color_theme(text: string): JuMuHuHex[] {
-    return parse(text, cam16)
+export function parse_colors(text: string): JuMuHuHex[] {
+    return jison_parse(text, cam16)
 }
 

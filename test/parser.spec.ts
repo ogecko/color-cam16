@@ -1,5 +1,5 @@
 import { describe, expect, test } from '@jest/globals'
-import { parse_color_theme } from '../src/index'
+import { parse_colors } from '../src/index'
 
 describe('Color Language Parser Functions', () => {
 
@@ -17,7 +17,7 @@ describe('Color Language Parser Functions', () => {
             { text: 'testcase -1.3', result: -1.3 },
         ]
         definitions.forEach(({ text, result }) => {
-            expect(parse_color_theme(text)).toEqual(result);
+            expect(parse_colors(text)).toEqual(result);
 
         })
     });
@@ -30,7 +30,7 @@ describe('Color Language Parser Functions', () => {
             { text: 'testcase hmj(270,20,50) darker by 21', result: { hexLabel2: "29v40" } },
         ]
         definitions.forEach(({ text, result }) => {
-            expect(parse_color_theme(text)).toMatchObject(result);
+            expect(parse_colors(text)).toMatchObject(result);
 
         })
     });
@@ -41,7 +41,7 @@ describe('Color Language Parser Functions', () => {
     //         { text: 'primary is hmj(10,10,50). secondary is hmj(180,20,40). primary to secondary in 3 steps', result: [{ Ju: 50 },{ Ju: 45 },{ Ju: 40 }] },
     //     ]
     //     definitions.forEach(({ text, result }) => {
-    //         expect(parse_color_theme(text)).toMatchObject(result);
+    //         expect(parse_colors(text)).toMatchObject(result);
 
     //     })
     // });
@@ -59,7 +59,7 @@ describe('Color Language Parser Functions', () => {
     //         // { text: 'gradient 2 is from blue to 1st triadic, in 6 steps', result: 30 }, 
     //     ]
     //     definitions.forEach(({ text, result }) => {
-    //         expect(parse_color_theme(text).map(c => c.hex)).toEqual(result);
+    //         expect(parse_colors(text).map(c => c.hex)).toEqual(result);
     //     })
     // });
 
