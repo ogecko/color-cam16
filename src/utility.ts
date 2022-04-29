@@ -1,4 +1,4 @@
-import { XYZ, sRGB, JuMuHu, CAM16u } from "./types"
+import { XYZ, sRGB, JuMuHu } from "./types"
 import { DEGREES, RADIANS, standard_whitepoints, iheH } from "./constants"
 
 // Utility Functions
@@ -12,6 +12,8 @@ export const degrees = (angle:number) => mod(angle * DEGREES, 360)
 export const radians = (angle:number) => mod(angle, 360) * RADIANS
 export const elem_mul = ([a,b,c]:XYZ,[x,y,z]:XYZ): XYZ => [a*x, b*y, c*z]
 export const is_hex_code = (s:string) => /^#?[0-9a-fA-F]{6}$/.test(s)
+export const is_ucs_label3 = (s:string) => /^[0-9][a-zA-Z][0-9]$/.test(s)
+export const is_ucs_label5 = (s:string) => /^[0-9]{2}[a-zA-Z][0-9]{2}$/.test(s)
 export const gamma = (x:number) => 
     (x <= 0) ? 0 :
     (x > 0.0031308) ? (1.055 * Math.pow(x, 0.4166666666666667) - 0.055) 
@@ -122,13 +124,52 @@ export function Hu_to_label(Hu:number): string {
 }
 
 /**
- * Convert from uniform space to hex label [A-Za-z]
- * @param  {number} Hu - Uniform space hue has a range [0..360] where 0=Red, 90=Yellow, 180=Green, 270=Blue, 360=Red. (note 360 range rather than 400 range of paper)
- * @returns string - hue label as a single character string. warm colors capitals (D=magenta, J=red, Y=yellow), cool colors lower (a=lemon, f=green, n=cyan, y=blue)
+ * Convert from hue label [A-Za-z] to uniform space hue Hu
+ * @param  {string} s - hue label as a single character string. warm colors capitals (A=purple, I=red, Y=yellow), cool colors lower (a=lemon, g=green, n=cyan, y=blue)
+ * @returns number - uniform space hue has a range [0..360] where 0=Red, 90=Yellow, 180=Green, 270=Blue, 360=Red. (note 360 range rather than 400 range of paper)
  */
+export function label_to_Hu(s:string): number {
+    const code = s.charCodeAt(0)                             // note I(73)=0, i(105)=180
+    return (64<code && code< 73) ? (code-73+52)*180/26 :     // code is A(65) to H(72)
+                      (code< 91) ? (code-73)*180/26 :        // code is I(73) to Z(90)
+           (96<code && code<123) ? (code-105+26)*180/26 : 0  // code is a(97) to z(122)
+}
+
+/**
+ * Convert from uniform space to ucs label 
+ * @param  {JuMuHu} c - Object with CAM16UCS components { Ju: lightness, Mu: colorfulness, Hu: hue angle [0-360]
+ * @param  {boolean=false} precise - Flag to indicate 5 char label (as opposed to 3 char label)
+ * @returns string - ucs label representing the color 
+ * for 3 char label "JHM" where J=lightness[0-9], H=hue label, M=colorfulness[0-9]; eg "8A2"
+ * for 5 char label 'JJHMM" where J=lightness[00-99], H=hue label, MM=colorfulness[00-99]; eg "85a20"
+ *  */
 export function JuMuHu_to_label(c:JuMuHu, precise=false): string {
     const divisor = precise ? 1 : 10
     return Math.floor(c.Ju/divisor)+Hu_to_label(c.Hu)+Math.floor(c.Mu*2/divisor)
+}
+
+/**
+ * Convert from ucs label to CAM16UCS components 
+ * @param  {string} s - ucs label (3 or 5 char) representing the color
+ * @returns JuMuHu - Object with CAM16UCS components { Ju: lightness, Mu: colorfulness, Hu: hue angle [0-360]
+ */
+export function label_to_JuMuHu(s:string): JuMuHu {
+    if (is_ucs_label3(s)) {
+        return {
+            Ju: parseInt(s.slice(0,1))*10,
+            Mu: parseInt(s.slice(2,3))/2*10,
+            Hu: label_to_Hu(s.slice(1,2)),
+        }
+    }
+    if (is_ucs_label5(s)) {
+        return {
+            Ju: parseInt(s.slice(0,2)),
+            Mu: parseInt(s.slice(3,5))/2,
+            Hu: label_to_Hu(s.slice(2,3)),
+        }
+    }
+    
+    return { Ju:0, Mu:0, Hu:0 }
 }
 
 
@@ -137,7 +178,7 @@ export function JuMuHu_to_label(c:JuMuHu, precise=false): string {
  * @param  {obj} x - Object with CAM16UCS components { Mu: colorfulness, Hu: hue angle [0-360] } 
  * @returns {obj} - Object with components { a: magenta-teal, b: yellow-blue }
  */
-export function MuHu_to_ab({ Mu, Hu }: JuMuHu|CAM16u): { a:number, b: number} {
+export function MuHu_to_ab({ Mu, Hu }: JuMuHu): { a:number, b: number} {
     const hu_rad = radians(Hu)
     return {
         a: Mu * Math.cos(hu_rad),

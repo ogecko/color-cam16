@@ -49,7 +49,6 @@ export const HuLabel_testdata = [
     { Hu: 90, label: 'V' },
     { Hu: 180, label: 'i' },
     { Hu: 270, label: 'v' },
-    { Hu: 360, label: 'I' },
     { Hu: 305, label: 'A' },
     { Hu: 118, label: 'Z' },
     { Hu: 125, label: 'a' },

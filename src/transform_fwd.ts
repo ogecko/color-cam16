@@ -1,4 +1,4 @@
-import { sRGB, XYZ, CAM16, CAM16u, JMh, JuMuHuHex } from './types'
+import { sRGB, XYZ, JMhQCs, JMh, CAM16u, JuMuHu } from './types'
 import { M16, A_w, D_RGB, N_bb, c, z, F_L_4, N_c, N_cb, n } from './utility'
 import { degrees, radians, is_hex_code, gamma_inverse, elem_mul, adapt } from './utility'
 import { h_to_Hu, JuMuHu_to_label } from './utility';
@@ -40,9 +40,9 @@ export function hex_to_srgb(hex: string): sRGB {
 /**
  * Convert XYZ value to CAM16 components
 * @param  XYZ - Array[3 x 1] where XYZ tristimulus values (under standard illuminant D65, normalized so that the luminance of the display white is Yw = 100Y)
-* @returns CAM16 - Object with CAM16 components { J: lightness[0-100] , Q: brightness[0-198], C: chroma[0-113], M: colorfulness[0-100], s: saturation[0-86], h: hue angle [0-360] }
+* @returns JMhQCs - Object with CAM16 components { J: lightness[0-100] , Q: brightness[0-198], C: chroma[0-113], M: colorfulness[0-100], s: saturation[0-86], h: hue angle [0-360] }
 */
-    export function xyz_to_cam16(XYZ: XYZ): CAM16 {
+    export function xyz_to_JMhQCs(XYZ: XYZ): JMhQCs {
     const
         [R_a, G_a, B_a] = elem_mul(M16(XYZ), D_RGB).map(adapt),
         a = R_a + (-12 * G_a + B_a) / 11,          // redness-greenness
@@ -83,11 +83,10 @@ export function JMH_to_JuMuHu({ J , M, h }:JMh) {
  * @param  {XYZ} XYZ - Array[3 x 1] where XYZ tristimulus values (under standard illuminant D65, normalized so that the luminance of the display white is Yw = 100Y)
  * @returns - Object with CAM16 components Ju: lightness , Mu: colorfulness, a: magenta-teal, b: yellow-blue }
  */
-export function xyz_to_cam16_ucs(XYZ: XYZ): CAM16u {
-    const { J, Q, C, M, s, h } = xyz_to_cam16(XYZ)
+export function xyz_to_JuMuHu(XYZ: XYZ): JuMuHu {
+    const { J, Q, C, M, s, h } = xyz_to_JMhQCs(XYZ)
     const { Ju, Mu, Hu } = JMH_to_JuMuHu({ J, M, h })
     return {
-        J, Q, C, M, s, h,
         Ju, Mu, Hu
     };
 }
@@ -95,12 +94,11 @@ export function xyz_to_cam16_ucs(XYZ: XYZ): CAM16u {
 /**
  * Convert CSS RGB Hex value to CAM16 components
  * @param  {string} hex - String RGB hex value #RRGGBB eg '#800000' = Maroon
- * @returns CAM16 - Object with CAM16 components { J: lightness , Q: brightness, C: chroma, M: colorfulness, s: saturation, h: hue angle [0-360] }
+ * @returns JMhQCs - Object with CAM16 components { J: lightness , Q: brightness, C: chroma, M: colorfulness, s: saturation, h: hue angle [0-360] }
  */
-export function hex_to_cam16(hex: string): CAM16 {
+export function hex_to_JMhQCs(hex: string): JMhQCs {
     const XYZ = srgb_to_xyz(hex_to_srgb(hex))
-    return xyz_to_cam16(XYZ)
-
+    return xyz_to_JMhQCs(XYZ)
 }
 
 
@@ -109,9 +107,9 @@ export function hex_to_cam16(hex: string): CAM16 {
  * @param  {string} hex - String RGB hex value #RRGGBB eg '#800000' = Maroon
  * @returns - Object with CAM16 UCS components { Ju: lightness , Mu: colorfulness, a: magenta-teal, b: yellow-blue }
  */
-export function hex_to_cam16_ucs(hex: string): CAM16u {
+export function hex_to_JuMuHu(hex: string): JuMuHu {
     const XYZ = srgb_to_xyz(hex_to_srgb(hex))
-    return xyz_to_cam16_ucs(XYZ)
+    return xyz_to_JuMuHu(XYZ)
 }
 
 /**
@@ -119,8 +117,8 @@ export function hex_to_cam16_ucs(hex: string): CAM16u {
  * @param  {string} hex - String RGB hex value #RRGGBB eg '#800000' = Maroon
  * @returns - Object with CAM16 UCS components and original hex { Ju: lightness , Mu: colorfulness, Hu: hue angle, hex: sRGB color, inGamut: true }
  */
-export function hex_to_cam16_ucs_ingamut(hex: string): JuMuHuHex {
-    const { Ju, Mu, Hu } = hex_to_cam16_ucs(hex)
+export function hex_to_color(hex: string): CAM16u {
+    const { Ju, Mu, Hu } = hex_to_JuMuHu(hex)
     return { 
         Ju, Mu, Hu, hex, 
         inGamut: true, 

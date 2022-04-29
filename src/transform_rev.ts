@@ -1,9 +1,10 @@
-import { sRGB, XYZ, JMh, JuMuHu, JuMuHuHex } from './types'
+import { sRGB, XYZ, JMh, JuMuHu, CAM16u } from './types'
 import { JMH_whitepoint, XYZ_blackpoint, XYZ_outOfGamut, EPSILONXYZ, EPSILONRGB } from './constants'
-import { M16_inv, D_RGB_inv, XYZ_w, A_w, N_bb, c, z, F_L_4, N_c, N_cb, n } from './utility'
+import { M16_inv, D_RGB_inv, XYZ_w, A_w, N_bb, c, z, F_L_4, N_c, N_cb, n, label_to_JuMuHu, is_hex_code, is_ucs_label3, is_ucs_label5 } from './utility'
 import { radians, elem_mul, unadapt, gamma } from './utility'
 import { Hu_to_h, JuMuHu_to_label } from './utility';
-import { find_largest_Mu } from './analysis';
+import { find_strongest_Mu } from './analysis';
+import { hex_to_color } from './transform_fwd'
 
 ////////////////////////////////////////////////////////////////////////////////////
 //                   Inverse Path CAM16 components to RGB hex value               //
@@ -14,7 +15,7 @@ import { find_largest_Mu } from './analysis';
  * @param  JMh Object with CAM16 components { J: lightness[0-100], M: colorfulness[0-52], h: hue angle [0-360] } 
  * @returns - Array[3 x 1] where XYZ tristimulus values (under standard illuminant D65, normalized so that the luminance of the display white is Yw = 100Y)
  */
-export function cam16_to_xyz({ J, M, h }: JMh): XYZ {
+export function JMh_to_xyz({ J, M, h }: JMh): XYZ {
     const
         h_rad = radians(h),
         cos_h = Math.cos(h_rad),
@@ -48,7 +49,7 @@ export function cam16_to_xyz({ J, M, h }: JMh): XYZ {
  * @param  JuMuHu - Object with CAM16UCS components { Ju: lightness, Mu: colorfulness, Hu: hue angle [0-360] }
  * @returns  Object with CAM16 components { J: lightness[0-100], M: colorfulness[0-52], h: hue angle [0-360] } 
  */
-export function cam16_ucs_to_JMh({ Ju, Mu, Hu }: JuMuHu): JMh {
+export function JuMuHu_to_JMh({ Ju, Mu, Hu }: JuMuHu): JMh {
     const M = (Math.exp(Mu * 0.0228) - 1) / 0.0228;
     const J = Ju / (1.7 - 0.007 * Ju);
     const h = Hu_to_h(Hu)
@@ -61,8 +62,8 @@ export function cam16_ucs_to_JMh({ Ju, Mu, Hu }: JuMuHu): JMh {
  * @param  JuMuHu - Object with CAM16UCS components { Ju: lightness, Mu: colorfulness, Hu: hue angle [0-360] }
  * @returns XYZ - Array[3 x 1] where XYZ tristimulus values (under standard illuminant D65, normalized so that the luminance of the display white is Yw = 100Y)
  */
-export function cam16_ucs_to_xyz({ Ju, Mu, Hu }: JuMuHu): XYZ {
-    return cam16_to_xyz(cam16_ucs_to_JMh({ Ju, Mu, Hu }));
+export function JuMuHu_to_xyz({ Ju, Mu, Hu }: JuMuHu): XYZ {
+    return JMh_to_xyz(JuMuHu_to_JMh({ Ju, Mu, Hu }));
 }
 
 
@@ -108,33 +109,10 @@ export function srgb_to_hex([R, G, B]: sRGB): string {
  * @param  JuMuHu - Object with CAM16UCS components { Ju: lightness, Mu: colorfulness, h: hue angle [0-360] } 
  * @returns - String RGB hex value #RRGGBB eg '#800000' = Maroon, Returns '' when out of Gamut.
  */
-export function cam16_ucs_to_hex(cam16u: JuMuHu): string {
-    const xyz1 = cam16_ucs_to_xyz(cam16u)
+export function JuMuHu_to_hex(cam16u: JuMuHu): string {
+    const xyz1 = JuMuHu_to_xyz(cam16u)
     const rgb1 = xyz_to_srgb(xyz1)
     return srgb_to_hex(rgb1)
-}
-
-/** Convert CAM16 Uniform Color Space components to hex color, label and ingamut flag 
- * @param  {JuMuHu} cam16u - Object with CAM16UCS components { Ju: lightness, Mu: colorfulness, h: hue angle [0-360] } 
- * @returns JuMuHuHex - Object with hex color, inGamut flag, labels and cam16u details
- */
-export function cam16_ucs_to_hex_ingamut(cam16u: JuMuHu): JuMuHuHex {
-    const result = {
-        inGamut: true,
-        hex: cam16_ucs_to_hex(cam16u),
-        hexMu: cam16u.Mu,
-        hexLabel1: '',
-        hexLabel2: '',
-        ...cam16u
-    }
-    if (result.hex == '') {
-        result.inGamut = false
-        result.hexMu = find_largest_Mu(cam16u)
-        result.hex = cam16_ucs_to_hex({ Ju: result.Ju, Mu: result.hexMu, Hu: result.Hu })
-    }
-    result.hexLabel1 = JuMuHu_to_label({ Ju: result.Ju, Mu: result.hexMu, Hu: result.Hu })
-    result.hexLabel2 = JuMuHu_to_label({ Ju: result.Ju, Mu: result.hexMu, Hu: result.Hu }, true)
-    return result
 }
 
 /**
@@ -142,6 +120,44 @@ export function cam16_ucs_to_hex_ingamut(cam16u: JuMuHu): JuMuHuHex {
  * @param  JHh - Object with CAM16UCS components { J: lightness, M: colorfulness, h: hue angle [0-360] } 
  * @returns - String RGB hex value #RRGGBB eg '#800000' = Maroon
  */
-export function cam16_to_hex(cam16: JMh): string {
-    return srgb_to_hex(xyz_to_srgb(cam16_to_xyz(cam16)))
+ export function JMh_to_hex(cam16: JMh): string {
+    return srgb_to_hex(xyz_to_srgb(JMh_to_xyz(cam16)))
+}
+
+
+/** Convert CAM16 Uniform Color Space components to hex color, label and ingamut flag 
+ * @param  {JuMuHu} JuMuHu - Object with CAM16UCS components { Ju: lightness, Mu: colorfulness, h: hue angle [0-360] } 
+ * @returns CAM16u - Object with hex color, inGamut flag, labels and cam16u details
+ */
+export function JuMuHu_to_color(JuMuHu: JuMuHu): CAM16u {
+    const result = {
+        inGamut: true,
+        hex: JuMuHu_to_hex(JuMuHu),
+        hexMu: JuMuHu.Mu,
+        hexLabel1: '',
+        hexLabel2: '',
+        ...JuMuHu
+    }
+    if (result.hex == '') {
+        result.inGamut = false
+        result.hexMu = find_strongest_Mu(JuMuHu)
+        result.hex = JuMuHu_to_hex({ Ju: result.Ju, Mu: result.hexMu, Hu: result.Hu })
+    }
+    result.hexLabel1 = JuMuHu_to_label({ Ju: result.Ju, Mu: result.hexMu, Hu: result.Hu })
+    result.hexLabel2 = JuMuHu_to_label({ Ju: result.Ju, Mu: result.hexMu, Hu: result.Hu }, true)
+    return result
+}
+
+
+/** Convert color label (either hex or ucs) to the structured color
+ * @param  {string} s - hex or ucs label (3 or 5 char) representing the color
+ * @returns {CAM16u} - Object with hex color, inGamut flag, labels and cam16u details
+ */
+ export function label_to_color(s: string): CAM16u {
+    if (is_hex_code(s)) return hex_to_color(s)
+    if (is_ucs_label3(s)) return JuMuHu_to_color(label_to_JuMuHu(s))
+    if (is_ucs_label5(s)) return JuMuHu_to_color(label_to_JuMuHu(s))
+
+    throw new Error('Bad Input: Must be of form "#DEFACE", "5Z8" or "50Z80"')
+
 }

@@ -1,7 +1,7 @@
 import { describe, expect, test } from '@jest/globals'
 import { hexsrgb_testdata } from './transform_testdata'
-import { marsBrownHex, marsBrownRGB, marsBrownXYZ, marsBrownCam16, marsBrownCam16ucs } from './transform_testdata'
-import { srgb_to_hex, srgb_to_xyz, hex_to_cam16, hex_to_cam16_ucs } from '../src/index'
+import { marsBrownHex, marsBrownRGB, marsBrownXYZ, marsBrownCam16, marsBrownJuMuHu } from './transform_testdata'
+import { srgb_to_hex, srgb_to_xyz, hex_to_JMhQCs, hex_to_JuMuHu } from '../src/index'
 
 
 describe('Reverse Color Transform Functions', () => {
@@ -30,12 +30,12 @@ describe('Reverse Color Transform Functions', () => {
         expect(srgb_to_xyz(marsBrownRGB)).toEqual(marsBrownXYZ);
     });
 
-    test('hex_to_cam16 converts #ad6242 Mars Brown correctly', () => {
-        expect(hex_to_cam16(marsBrownHex)).toEqual(marsBrownCam16);
+    test('hex_to_JMhQCs converts #ad6242 Mars Brown correctly', () => {
+        expect(hex_to_JMhQCs(marsBrownHex)).toEqual(marsBrownCam16);
     });
 
-    test('hex_to_cam16_ucs converts #ad6242 Mars Brown correctly', () => {
-        expect(hex_to_cam16_ucs(marsBrownHex)).toEqual(marsBrownCam16ucs);
+    test('hex_to_JuMuHu converts #ad6242 Mars Brown correctly', () => {
+        expect(hex_to_JuMuHu(marsBrownHex)).toEqual(marsBrownJuMuHu);
     });
 
 })

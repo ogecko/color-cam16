@@ -36,8 +36,10 @@
             ["\\)", "return ')';"],
             ["\\.", "return '.';"],
             [",", "return ',';"],
-            ["[+-]?[0-9]+(\\.[0-9]+)?", "return 'digits';"],
+            ["[0-9][A-Za-z][0-9]", "return 'ColorLabel3';"],
+            ["[0-9]{2}[A-Za-z][0-9]{2}", "return 'ColorLabel5';"],
             ["#[0-9a-fA-F]{6}", "return 'ColorHex';"],
+            ["[+-]?[0-9]+(\\.[0-9]+)?", "return 'digits';"],
             ["[a-zA-Z][[a-zA-Z0-9]*", "return 'Identifier';"]
         ]
     },
@@ -68,14 +70,16 @@
         ],
         "Color": [
             [ "Identifier", "$$ = identifiers[$1]" ],
-            [ "ColorHex", "$$ = cam16.hex_to_cam16_ucs_ingamut($1);" ],
-            [ "hmj ( Number Number Number )", "$$ = cam16.cam16_ucs_to_hex_ingamut({ Hu: $3, Mu: $4, Ju: $5 })" ],
-            [ "Color Adjustment","$$ = cam16.cam16_ucs_adjust($2, $1)[0];" ]
+            [ "ColorHex", "$$ = cam16.label_to_color($1);" ],
+            [ "ColorLabel3", "$$ = cam16.label_to_color($1);" ],
+            [ "ColorLabel5", "$$ = cam16.label_to_color($1);" ],
+            [ "hmj ( Number Number Number )", "$$ = cam16.JuMuHu_to_color({ Hu: $3, Mu: $4, Ju: $5 })" ],
+            [ "Color Adjustment","$$ = cam16.adjust_colors($2, $1)[0];" ]
         ],
         "ColorSequence" :[
-            [ "Color AdjSequence","$$ = cam16.cam16_ucs_adjust($2, $1);" ],
-            [ "ColorSequence AdjSequence","$$ = cam16.cam16_ucs_adjust($2, ...$1);" ],
-            [ "rainbow in Number steps","$$ = cam16.cam16_ucs_rainbow({ steps: $3 });" ]
+            [ "Color AdjSequence","$$ = cam16.adjust_colors($2, $1);" ],
+            [ "ColorSequence AdjSequence","$$ = cam16.adjust_colors($2, ...$1);" ],
+            [ "rainbow in Number steps","$$ = cam16.rainbow_colors({ steps: $3 });" ]
         ],
         "AdjSequence": [
             ["Adjustment in Number steps", "$$ = {...$1, steps: $3 }"]

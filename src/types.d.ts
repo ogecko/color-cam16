@@ -38,36 +38,25 @@
 // Utility Types for different color spaces
 export type sRGB = [number, number, number]        // where R, G, B range from [0 to 1]
 export type XYZ = [number, number, number]         // tristimulus values (under standard illuminant D65, normalized so that the luminance of the display white is Yw = 100Y)
-export type CAM16 = {                              // Object with CAM16 components
-    J:number,                                  // J: lightness[0-100] 
-    Q:number,                                  // Q: brightness[0-198]
-    C:number,                                  // C: chroma[0-113]
-    M:number,                                  // M: colorfulness[0-100]
-    s:number,                                  // s: saturation[0-86]
-    h:number                                   // h: hue angle [0-360]
-}
-export type CAM16u = {                              // CAM16UCS - Object with CAM16 Universal Color Space components
-    J:number,                                  // J: lightness[0-100] 
-    Q:number,                                  // Q: brightness[0-198]
-    C:number,                                  // C: chroma[0-113]
-    M:number,                                  // M: colorfulness[0-100]
-    s:number,                                  // s: saturation[0-86]
-    h:number,                                  // h: hue angle [0-360]
-    Ju:number,                                 // Ju: uniform lightness[0-100] 
-    Mu:number,                                 // Mu: uniform colorfulness[0-100]
-    Hu:number                                  // Hu: uniform hue angle [0-360]
-}
-export type JMh = {                              // Object with CAM16 components
+export type JMh = {                            // Object with CAM16 components
     J:number,                                  // J: lightness[0-100] 
     M:number,                                  // M: colorfulness[0-100]
     h:number                                   // h: hue angle [0-360]
+}
+export type JMhQCs = {                         // Object with CAM16 components
+    J:number,                                  // J: lightness[0-100] 
+    M:number,                                  // M: colorfulness[0-100]
+    h:number                                   // h: hue angle [0-360]
+    Q:number,                                  // Q: brightness[0-198]
+    C:number,                                  // C: chroma[0-113]
+    s:number,                                  // s: saturation[0-86]
 }
 export type JuMuHu = {                              // Object with CAM16 components
     Ju:number,                                 // Ju: uniform lightness[0-100] 
     Mu:number,                                 // Mu: uniform colorfulness[0-100]
     Hu:number                                  // Hu: uniform hue angle [0-360]
 }
-export type JuMuHuHex = {                              // Object with CAM16 components
+export type CAM16u = {                              // Object with CAM16 UCS components
     Ju:number,                                 // Ju: uniform lightness[0-100] 
     Mu:number,                                 // Mu: uniform colorfulness[0-100]
     Hu:number,                                  // Hu: uniform hue angle [0-360]

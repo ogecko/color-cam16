@@ -1,6 +1,6 @@
-import { JuMuHu, JuMuHuHex, CAM16u } from "./types"
+import { JuMuHu, CAM16u } from "./types"
 import { c360, MuHu_to_ab } from "./utility"
-import { cam16_ucs_to_hex, cam16_ucs_to_hex_ingamut } from "./transform_rev"
+import { JuMuHu_to_hex, JuMuHu_to_color } from "./transform_rev"
 
 /**
  * Find the maximum Mu for a given Hu and Ju, using a recursive binary search
@@ -12,12 +12,12 @@ import { cam16_ucs_to_hex, cam16_ucs_to_hex_ingamut } from "./transform_rev"
  * @param  {number} n (default=0) - number of iterations so far
  * @returns number - the maximum Mu for the given Hu and Ju, to an accuracy of +/- 0.1
  */
-export function find_largest_Mu(ucs: JuMuHu, min: number = 0, max: number = 100, n: number = 0): number {
+export function find_strongest_Mu(ucs: JuMuHu, min: number = 0, max: number = 100, n: number = 0): number {
     if (max - min < 0.1) return min
     if ((n++ > 13) || (n < 0)) return 0
     const half = (max + min) / 2
-    const hex = cam16_ucs_to_hex({ Ju: ucs.Ju, Mu: half, Hu: ucs.Hu })
-    return (hex == '') ? find_largest_Mu(ucs, min, half, n) : find_largest_Mu(ucs, half, max, n)
+    const hex = JuMuHu_to_hex({ Ju: ucs.Ju, Mu: half, Hu: ucs.Hu })
+    return (hex == '') ? find_strongest_Mu(ucs, min, half, n) : find_strongest_Mu(ucs, half, max, n)
 }
 
 /** Find the approximate dMu/dJu gradient at highest chroma for a given Hu and Ju
@@ -27,8 +27,8 @@ export function find_largest_Mu(ucs: JuMuHu, min: number = 0, max: number = 100,
  */
 function gradient_dMu_dJu(Hu: number, Ju: number): number {
     const epsilon = 0.1
-    const Mu1 = find_largest_Mu({ Hu, Ju, Mu: 0 })
-    const Mu2 = find_largest_Mu({ Hu, Ju: Ju + epsilon, Mu: 0 })
+    const Mu1 = find_strongest_Mu({ Hu, Ju, Mu: 0 })
+    const Mu2 = find_strongest_Mu({ Hu, Ju: Ju + epsilon, Mu: 0 })
     return (Mu2 - Mu1) / epsilon
 }
 
@@ -87,19 +87,19 @@ export function find_strongest_Ju(Hu: number, min: number = 5, max: number = 95,
     }
 }
 
-export function find_strongest_ucs(Hu: number): JuMuHuHex {
+export function find_strongest_color(Hu: number): CAM16u {
     const Ju = find_strongest_Ju(Hu)
-    const Mu = find_largest_Mu({ Ju, Mu: 0, Hu })
-    return cam16_ucs_to_hex_ingamut({ Ju, Mu, Hu })
+    const Mu = find_strongest_Mu({ Ju, Mu: 0, Hu })
+    return JuMuHu_to_color({ Ju, Mu, Hu })
 }
 
-export function cam16_ucs_rainbow({ Hu1 = 0, Hu2 = 360, steps = 13 }): JuMuHuHex[] {
+export function rainbow_colors({ Hu1 = 0, Hu2 = 360, steps = 13 }): CAM16u[] {
     if (steps == 0) {
-        return [find_strongest_ucs(Hu1)]
+        return [find_strongest_color(Hu1)]
     } else {
         return Array(steps + 1).fill(0).map((_, i) => {
             const Hu = Hu1 + i * (Hu2 - Hu1) / steps
-            return find_strongest_ucs(Hu)
+            return find_strongest_color(Hu)
         })
     }
 }
@@ -114,7 +114,7 @@ export function cam16_ucs_rainbow({ Hu1 = 0, Hu2 = 360, steps = 13 }): JuMuHuHex
  * @param  {JuMuHu} y - Object with CAM16UCS components { Ju: lightness, Mu: colorfulness, Hu: hue angle [0-360] } 
  * @returns {number} - A value which represents the similarity of two colors (0=same, 25=very different) 
  */
-export function deltaE_ucs(x: JuMuHu | CAM16u, y: JuMuHu | CAM16u): number {
+export function delta_e(x: JuMuHu, y: JuMuHu): number {
     const xab = MuHu_to_ab(x)
     const yab = MuHu_to_ab(y)
     const da = xab.a - yab.a, db = xab.b - yab.b, dj = x.Ju - y.Ju;
@@ -153,9 +153,9 @@ export function shortest_signed_distance(a: number, b: number): number {
  * @param  {number} adj.steps=1 - Optional number of adjusted colors for each input color
  * @param  {boolean} adj.contrast=false - Optional flag to indicate lightness change by contrast, ie if Cn.Ju>50 then negative Jub
  * @param  {JuMuHu} color1,color2,color3, ... - Input color object(s) to adjust
- * @returns {JuMuHuHex[]} - A flattened Array of objects holding the adjusted colors
+ * @returns {CAM16u[]} - A flattened Array of objects holding the adjusted colors
  */
-export function cam16_ucs_adjust({ Jua = 1, Jub = 0, Mua = 1, Mub = 0, Hua = 1, Hub = 0, steps = 1, contrast = false }, ...colors: JuMuHuHex[]): JuMuHuHex[] {
+export function adjust_colors({ Jua = 1, Jub = 0, Mua = 1, Mub = 0, Hua = 1, Hub = 0, steps = 1, contrast = false }, ...colors: CAM16u[]): CAM16u[] {
     // for each of the colors in the arguments
     return colors.map(Cn => {
         // work out the starting and finishing colors
@@ -164,7 +164,7 @@ export function cam16_ucs_adjust({ Jua = 1, Jub = 0, Mua = 1, Mub = 0, Hua = 1, 
         const cf = { Ju: Cn.Ju * Jua + Jub * cc, Mu: Cn.Mu * Mua + Mub, Hu: Cn.Hu * Hua + Hub }
         // create array if steps > 1
         if (steps == 1) {
-            return [cam16_ucs_to_hex_ingamut(cf)]
+            return [JuMuHu_to_color(cf)]
         } else {
             const dJu = (cf.Ju - cs.Ju) / (steps - 1)
             const dMu = (cf.Mu - cs.Mu) / (steps - 1)
@@ -175,7 +175,7 @@ export function cam16_ucs_adjust({ Jua = 1, Jub = 0, Mua = 1, Mub = 0, Hua = 1, 
                     Mu: cs.Mu + i * dMu,
                     Hu: cs.Hu + i * dHu
                 }
-                return cam16_ucs_to_hex_ingamut(ct)
+                return JuMuHu_to_color(ct)
             })
         }
         // flatten the array of arrays to a single array of colors

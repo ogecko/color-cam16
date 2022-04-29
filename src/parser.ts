@@ -1,13 +1,13 @@
-import { JuMuHuHex } from './types'
-import { cam16_ucs_adjust } from './analysis'
-import { cam16_ucs_to_hex_ingamut } from './transform_rev'
-import { hex_to_cam16_ucs_ingamut } from './transform_fwd'
+import { CAM16u } from './types'
+import { adjust_colors, rainbow_colors } from './analysis'
+import { JuMuHu_to_color, label_to_color } from './transform_rev'
 
 // functions passed to language.js
 const cam16 = { 
-    cam16_ucs_adjust, 
-    cam16_ucs_to_hex_ingamut, 
-    hex_to_cam16_ucs_ingamut 
+    JuMuHu_to_color,
+    label_to_color,
+    adjust_colors, 
+    rainbow_colors,
 }
 
 /////////////////////////////////////////////////////////////////////////////////
@@ -24,7 +24,7 @@ const cam16 = {
 // OPTION 2 Buildtime generation of parse with command 'jison language.json'
 import { parse as jison_parse } from './language'
 
-export function parse_colors(text: string): JuMuHuHex[] {
+export function parse_colors(text: string): CAM16u[] {
     return jison_parse(text, cam16)
 }
 

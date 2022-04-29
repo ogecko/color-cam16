@@ -35,6 +35,21 @@ describe('Color Language Parser Functions', () => {
         })
     });
 
+    test('should parse color labels into js Objects with cam16 ucs components and hex', () => {
+        const definitions = [
+            { text: 'testcase 5I9', result: { Ju: 50, Hu: 0, Mu: 45 } },
+            { text: 'testcase 8I2', result: { Ju: 80, Hu: 0, Mu: 10 } },
+            { text: 'testcase 56I22', result: { Ju: 56, Hu: 0, Mu: 11 } },
+            { text: 'testcase 5i9', result: { Ju: 50, Hu: 180, Mu: 45 } },
+            { text: 'testcase 2v4', result: { Ju: 20, Hu: 270, Mu: 20 } },
+            { text: 'testcase 2V4', result: { Ju: 20, Hu: 90, Mu: 20 } },
+        ]
+        definitions.forEach(({ text, result }) => {
+            expect(parse_colors(text)).toMatchObject(result);
+
+        })
+    });
+
     // test('should parse color assignments and use of identifiers', () => {
     //     const definitions = [
     //         { text: 'primary is hmj(10,10,50). secondary is hmj(180,20,40). primary lighter by 8', result: [{ Ju: 58 }] },
