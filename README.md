@@ -16,6 +16,7 @@ color_gradient = parse_colors('1A5 to 9Z5 in 5 steps')
 warm_colors = parse_colors('1A5 to 9Z5 in 15 steps')
 cool_colors = parse_colors('9a5 to 1z5 in 15 steps')
 rainbow = parse_colors('rainbow in 26 steps')
+hue_A = parse_colors('0A0 lighter to 100 in 11 steps, stronger to 50 in 10 steps')
 
 ```
 Color gradient
@@ -93,41 +94,66 @@ Rainbow Colors
 
 Hue A
 
-![](https://readme-swatches.vercel.app/d5b8fd)<br>
-![](https://readme-swatches.vercel.app/bda0e5)
-![](https://readme-swatches.vercel.app/bf9def)
-![](https://readme-swatches.vercel.app/c199fa)<br>
-![](https://readme-swatches.vercel.app/a589cd)
-![](https://readme-swatches.vercel.app/a786d7)
-![](https://readme-swatches.vercel.app/a982e2)
-![](https://readme-swatches.vercel.app/ac7dee)
-![](https://readme-swatches.vercel.app/ae77fc)<br>
-![](https://readme-swatches.vercel.app/8e72b6)
-![](https://readme-swatches.vercel.app/906ec0)
-![](https://readme-swatches.vercel.app/926acb)
-![](https://readme-swatches.vercel.app/9565d8)
-![](https://readme-swatches.vercel.app/975ee5)
-![](https://readme-swatches.vercel.app/9a56f5)<br>
-![](https://readme-swatches.vercel.app/775ba0)
-![](https://readme-swatches.vercel.app/7957aa)
-![](https://readme-swatches.vercel.app/7c53b5)
-![](https://readme-swatches.vercel.app/7e4cc2)
-![](https://readme-swatches.vercel.app/8044d0)
-![](https://readme-swatches.vercel.app/8338e0)
-![](https://readme-swatches.vercel.app/8624f3)<br>
-![](https://readme-swatches.vercel.app/604489)
-![](https://readme-swatches.vercel.app/623f93)
-![](https://readme-swatches.vercel.app/64399f)
-![](https://readme-swatches.vercel.app/6731ac)
-![](https://readme-swatches.vercel.app/6924bb)
-![](https://readme-swatches.vercel.app/6c03cd)<br>
-![](https://readme-swatches.vercel.app/482972)
-![](https://readme-swatches.vercel.app/4a237d)
-![](https://readme-swatches.vercel.app/4c1989)
-![](https://readme-swatches.vercel.app/4e0198)<br>
-![](https://readme-swatches.vercel.app/2c025a)
-
-- rainbow_colors
+![](https://readme-swatches.vercel.app/000000)<br>
+![](https://readme-swatches.vercel.app/222121)
+![](https://readme-swatches.vercel.app/232028)
+![](https://readme-swatches.vercel.app/251d32)
+![](https://readme-swatches.vercel.app/28183e)
+![](https://readme-swatches.vercel.app/2b0e4f)<br>
+![](https://readme-swatches.vercel.app/3d3d3c)
+![](https://readme-swatches.vercel.app/3f3b43)
+![](https://readme-swatches.vercel.app/41384d)
+![](https://readme-swatches.vercel.app/443559)
+![](https://readme-swatches.vercel.app/472f69)
+![](https://readme-swatches.vercel.app/4a247d)
+![](https://readme-swatches.vercel.app/4f0398)<br>
+![](https://readme-swatches.vercel.app/565554)
+![](https://readme-swatches.vercel.app/57535c)
+![](https://readme-swatches.vercel.app/595065)
+![](https://readme-swatches.vercel.app/5c4d71)
+![](https://readme-swatches.vercel.app/5f4881)
+![](https://readme-swatches.vercel.app/634094)
+![](https://readme-swatches.vercel.app/6732ad)
+![](https://readme-swatches.vercel.app/6c06ce)<br>
+![](https://readme-swatches.vercel.app/6d6b6b)
+![](https://readme-swatches.vercel.app/6e6a72)
+![](https://readme-swatches.vercel.app/71677c)
+![](https://readme-swatches.vercel.app/736488)
+![](https://readme-swatches.vercel.app/775f98)
+![](https://readme-swatches.vercel.app/7a58ab)
+![](https://readme-swatches.vercel.app/7f4dc2)
+![](https://readme-swatches.vercel.app/843ae1)<br>
+![](https://readme-swatches.vercel.app/848282)
+![](https://readme-swatches.vercel.app/858089)
+![](https://readme-swatches.vercel.app/887e93)
+![](https://readme-swatches.vercel.app/8a7a9f)
+![](https://readme-swatches.vercel.app/8e76af)
+![](https://readme-swatches.vercel.app/9170c1)
+![](https://readme-swatches.vercel.app/9666d9)
+![](https://readme-swatches.vercel.app/9b57f6)<br>
+![](https://readme-swatches.vercel.app/9b9998)
+![](https://readme-swatches.vercel.app/9c97a0)
+![](https://readme-swatches.vercel.app/9f95aa)
+![](https://readme-swatches.vercel.app/a191b6)
+![](https://readme-swatches.vercel.app/a58dc6)
+![](https://readme-swatches.vercel.app/a987d8)
+![](https://readme-swatches.vercel.app/ad7ef0)<br>
+![](https://readme-swatches.vercel.app/b2b0b0)
+![](https://readme-swatches.vercel.app/b4aeb7)
+![](https://readme-swatches.vercel.app/b6acc2)
+![](https://readme-swatches.vercel.app/b9a9ce)
+![](https://readme-swatches.vercel.app/bda4de)
+![](https://readme-swatches.vercel.app/c19ff0)<br>
+![](https://readme-swatches.vercel.app/cbc9c8)
+![](https://readme-swatches.vercel.app/cdc7d0)
+![](https://readme-swatches.vercel.app/cfc4da)
+![](https://readme-swatches.vercel.app/d2c1e7)
+![](https://readme-swatches.vercel.app/d5bdf7)<br>
+![](https://readme-swatches.vercel.app/e5e3e2)
+![](https://readme-swatches.vercel.app/e7e1ea)
+![](https://readme-swatches.vercel.app/e9def4)<br>
+![](https://readme-swatches.vercel.app/ffffff)<br>
+![](https://readme-swatches.vercel.app/)
 - adjust_color
 
 ## Color Space Transforms
