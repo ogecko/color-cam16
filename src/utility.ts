@@ -12,8 +12,9 @@ export const degrees = (angle:number) => mod(angle * DEGREES, 360)
 export const radians = (angle:number) => mod(angle, 360) * RADIANS
 export const elem_mul = ([a,b,c]:XYZ,[x,y,z]:XYZ): XYZ => [a*x, b*y, c*z]
 export const is_hex_code = (s:string) => /^#?[0-9a-fA-F]{6}$/.test(s)
-export const is_ucs_label3 = (s:string) => /^[0-9][a-zA-Z][0-9]$/.test(s)
-export const is_ucs_label5 = (s:string) => /^[0-9]{2}[a-zA-Z][0-9]{2}$/.test(s)
+export const is_ucs_label3 = (s:string) => /^[W0-9][a-zA-Z][0-9]$/.test(s)
+export const is_ucs_label5 = (s:string) => /^[W0-9]{2}[a-zA-Z][0-9]{2}$/.test(s)
+export const is_ucs_white = (s:string) => /^W/.test(s)
 export const gamma = (x:number) => 
     (x <= 0) ? 0 :
     (x > 0.0031308) ? (1.055 * Math.pow(x, 0.4166666666666667) - 0.055) 
@@ -156,14 +157,14 @@ export function JuMuHu_to_label(c:JuMuHu, precise=false): string {
 export function label_to_JuMuHu(s:string): JuMuHu {
     if (is_ucs_label3(s)) {
         return {
-            Ju: parseInt(s.slice(0,1))*10,
+            Ju: is_ucs_white(s)? 100 : parseInt(s.slice(0,1))*10,
             Mu: parseInt(s.slice(2,3))/2*10,
             Hu: label_to_Hu(s.slice(1,2)),
         }
     }
     if (is_ucs_label5(s)) {
         return {
-            Ju: parseInt(s.slice(0,2)),
+            Ju: is_ucs_white(s)? 100 : parseInt(s.slice(0,2)),
             Mu: parseInt(s.slice(3,5))/2,
             Hu: label_to_Hu(s.slice(2,3)),
         }

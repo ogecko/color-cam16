@@ -16,7 +16,7 @@ color_gradient = parse_colors('1A5 to 9Z5 in 5 steps')
 warm_colors = parse_colors('1A5 to 9Z5 in 15 steps')
 cool_colors = parse_colors('9a5 to 1z5 in 15 steps')
 rainbow = parse_colors('rainbow in 26 steps')
-hue_A = parse_colors('0A0 lighter to 100 in 11 steps, stronger to 50 in 10 steps')
+hue_A = parse_colors('0A0 lighter to 100 in 11 steps, stronger to 50 in 10 steps').filter(x => x.inGamut)
 
 ```
 Color gradient

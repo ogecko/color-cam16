@@ -1,7 +1,7 @@
 import { describe, expect, test } from '@jest/globals'
 import { hHu_testdata, HuLabel_testdata } from './transform_testdata'
 import { fp, c360, lerp, is_hex_code, is_ucs_label3, is_ucs_label5 } from '../src/index'
-import { h_to_Hu, Hu_to_h, Hu_to_label, label_to_Hu } from '../src/index'
+import { h_to_Hu, Hu_to_h, Hu_to_label, label_to_Hu, label_to_JuMuHu } from '../src/index'
 
 describe('Utility Functions', () => {
     test('fp should convert floating point to string with 2 decimals', () => {
@@ -61,6 +61,15 @@ describe('Utility Functions', () => {
         ]
         testdata.forEach(d => expect(d.s+' '+is_ucs_label5(d.s)).toBe(d.s+' '+d.expectedresult))
     });
+
+    test('label_to_JuMuHu should convert label correctly', () => {
+        const testdata = [ 
+            { s: '8a3', expectedresult: { Ju: 80, Hu: 124.61538461538461, Mu: 15 } },
+            { s: 'WV9', expectedresult: { Ju: 100, Hu: 90, Mu: 45 } },
+        ]
+        testdata.forEach(d => expect(label_to_JuMuHu(d.s)).toStrictEqual(d.expectedresult))
+    });
+
 
     test('h_to_Hu converts from hue to uniform hue space correctly', () => {
         hHu_testdata.forEach(d => {
