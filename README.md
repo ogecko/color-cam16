@@ -156,6 +156,19 @@ Hue A
 ![](https://readme-swatches.vercel.app/)
 - adjust_color
 
+```
+{
+    "Ju":70,
+    "Mu":16.66,
+    "Hu":32
+    "inGamut":true,
+    "hex":"#d8a488",
+    "hexMu":16.666666666666664,
+    "hexLabel1":"7N3",
+    "hexLabel2":"70N33",
+}
+```
+
 ## Color Space Transforms
 - JuMuHu_to_color
 - label_to_color

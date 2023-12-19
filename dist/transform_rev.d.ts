@@ -1,0 +1,10 @@
+import { sRGB, XYZ, JMh, JuMuHu, CAM16u } from './types';
+export declare function JMh_to_xyz({ J, M, h }: JMh): XYZ;
+export declare function JuMuHu_to_JMh({ Ju, Mu, Hu }: JuMuHu): JMh;
+export declare function JuMuHu_to_xyz({ Ju, Mu, Hu }: JuMuHu): XYZ;
+export declare function xyz_to_srgb([X, Y, Z]: XYZ): sRGB;
+export declare function srgb_to_hex([R, G, B]: sRGB): string;
+export declare function JuMuHu_to_hex(cam16u: JuMuHu): string;
+export declare function JMh_to_hex(cam16: JMh): string;
+export declare function JuMuHu_to_color(JuMuHu: JuMuHu): CAM16u;
+export declare function label_to_color(s: string): CAM16u;

@@ -1,13 +1,13 @@
 {
   "name": "color-cam16",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Perceptual Color Space and Language based on the CAM16 Uniform Color Space",
-  "main": "src/index.ts",
+  "main": "dist/index.js",
   "repository": "git@github.com:ogecko/color-cam16.git",
   "author": "David Morrison <jdmorriso@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "build": "cd src; jison language.json",
+    "build": "cd src; jison language.json; cp language.js ../dist; cd ..; tsc --build tsconfig.build.json",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage"
