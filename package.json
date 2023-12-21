@@ -11,7 +11,8 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
-    "publish": "echo use Google Authenticator and command: npm login --otp=??????; npm publish"
+    "publish": "echo use Google Authenticator and command: npm login --otp=??????; npm publish",
+    "generate": "npx ts-node src/generate.ts"
   },
   "devDependencies": {
     "@types/jest": "^27.4.1",
@@ -28,5 +29,8 @@
     "tsconfig-paths": "^3.14.1",
     "typescript": "^4.6.3"
   },
-  "dependencies": {}
+  "dependencies": {
+    "color-name-list": "github:meodai/color-names",
+    "lodash": "^4.17.21"
+  }
 }
