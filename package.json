@@ -1,6 +1,6 @@
 {
   "name": "color-cam16",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Perceptual Color Space and Language based on the CAM16 Uniform Color Space",
   "main": "dist/index.js",
   "repository": "git@github.com:ogecko/color-cam16.git",
