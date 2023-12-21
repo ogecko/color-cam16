@@ -10,7 +10,8 @@
     "build": "cd src; jison language.json; cp language.js ../dist; cd ..; tsc --build tsconfig.build.json",
     "test": "jest",
     "test:watch": "jest --watch",
-    "test:cov": "jest --coverage"
+    "test:cov": "jest --coverage",
+    "publish": "echo use Google Authenticator and command: npm login --otp=??????; npm publish"
   },
   "devDependencies": {
     "@types/jest": "^27.4.1",
