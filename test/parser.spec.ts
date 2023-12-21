@@ -24,7 +24,7 @@ describe('Color Language Parser Functions', () => {
 
     test('should parse a Colors into js Objects with cam16 ucs components and hex', () => {
         const definitions = [
-            { text: 'testcase #ff0000', result: { hexLabel2: "52J101" } },
+            { text: 'testcase #ff0000', result: { hexLabel2: "52J102" } },
             { text: 'testcase hmj(0,40,50)', result: { hexLabel2: "50I80" } },
             { text: 'testcase hmj(0,100,50)', result: { hexLabel2: "50I97" } },
             { text: 'testcase hmj(270,20,50) darker by 21', result: { hexLabel2: "29v40" } },

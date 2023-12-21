@@ -128,7 +128,7 @@ function label_to_Hu(s) {
 exports.label_to_Hu = label_to_Hu;
 function JuMuHu_to_label(c, precise = false) {
     const divisor = precise ? 1 : 10;
-    return Math.floor(c.Ju / divisor) + Hu_to_label(c.Hu) + Math.floor(c.Mu * 2 / divisor);
+    return Math.round(c.Ju / divisor) + Hu_to_label(c.Hu) + Math.round(c.Mu * 2 / divisor);
 }
 exports.JuMuHu_to_label = JuMuHu_to_label;
 function label_to_JuMuHu(s) {

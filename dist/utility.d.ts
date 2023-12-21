@@ -2,7 +2,7 @@ import { XYZ, sRGB, JuMuHu } from "./types";
 export declare const fp: (x: number) => string;
 export declare const c360: (h: number) => number;
 export declare const lerp: (a: number, b: number, t: number) => number;
-export declare const sgn: (x: number) => 0 | 1 | -1;
+export declare const sgn: (x: number) => 1 | 0 | -1;
 export declare const mod: (a: number, b: number) => number;
 export declare const clip: (a: number, b: number, x: number) => number;
 export declare const degrees: (angle: number) => number;
