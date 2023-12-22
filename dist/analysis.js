@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.adjust_colors = exports.shortest_signed_distance = exports.delta_e = exports.rainbow_colors = exports.find_strongest_color = exports.find_strongest_Ju = exports.find_strongest_Mu = void 0;
 const utility_1 = require("./utility");
 const transform_rev_1 = require("./transform_rev");
-function find_strongest_Mu(ucs, min = 0, max = 100, n = 0) {
+function find_strongest_Mu(ucs, min = 0, max = 47, n = 0) {
     if (max - min < 0.1)
         return min;
     if ((n++ > 13) || (n < 0))
@@ -19,36 +19,36 @@ function gradient_dMu_dJu(Hu, Ju) {
     const Mu2 = find_strongest_Mu({ Hu, Ju: Ju + epsilon, Mu: 0 });
     return (Mu2 - Mu1) / epsilon;
 }
-function find_strongest_Ju(Hu, min = 5, max = 95, n = 0, useLookup = true) {
+function find_strongest_Ju(Hu, min = 5, max = 94, n = 0, useLookup = true) {
     if (useLookup) {
         const lookup = [
-            { "Ju": 59.6, "Hu": 0 },
-            { "Ju": 62.2, "Hu": 14 },
-            { "Ju": 67.9, "Hu": 28 },
-            { "Ju": 72.4, "Hu": 42 },
-            { "Ju": 76.2, "Hu": 55 },
-            { "Ju": 79.9, "Hu": 69 },
-            { "Ju": 83.6, "Hu": 83 },
-            { "Ju": 87.4, "Hu": 97 },
-            { "Ju": 91.7, "Hu": 110 },
-            { "Ju": 94.9, "Hu": 124 },
-            { "Ju": 88.0, "Hu": 138 },
-            { "Ju": 85.1, "Hu": 152 },
-            { "Ju": 61.1, "Hu": 166 },
-            { "Ju": 67.4, "Hu": 180 },
-            { "Ju": 75.1, "Hu": 193 },
-            { "Ju": 81.8, "Hu": 207 },
-            { "Ju": 89.8, "Hu": 221 },
-            { "Ju": 76.1, "Hu": 235 },
-            { "Ju": 67.1, "Hu": 249 },
-            { "Ju": 58.7, "Hu": 263 },
-            { "Ju": 45.3, "Hu": 276 },
-            { "Ju": 39.2, "Hu": 290 },
-            { "Ju": 45.0, "Hu": 304 },
-            { "Ju": 62.8, "Hu": 318 },
-            { "Ju": 63.0, "Hu": 332 },
-            { "Ju": 63.1, "Hu": 346 },
-            { "Ju": 59.6, "Hu": 360 }
+            { "Ju": 50, "Hu": 0 },
+            { "Ju": 50, "Hu": 14 },
+            { "Ju": 60, "Hu": 28 },
+            { "Ju": 60, "Hu": 42 },
+            { "Ju": 70, "Hu": 55 },
+            { "Ju": 70, "Hu": 69 },
+            { "Ju": 80, "Hu": 83 },
+            { "Ju": 80, "Hu": 97 },
+            { "Ju": 90, "Hu": 110 },
+            { "Ju": 90, "Hu": 124 },
+            { "Ju": 90, "Hu": 138 },
+            { "Ju": 80, "Hu": 152 },
+            { "Ju": 70, "Hu": 166 },
+            { "Ju": 70, "Hu": 180 },
+            { "Ju": 80, "Hu": 193 },
+            { "Ju": 80, "Hu": 207 },
+            { "Ju": 80, "Hu": 221 },
+            { "Ju": 80, "Hu": 235 },
+            { "Ju": 70, "Hu": 249 },
+            { "Ju": 60, "Hu": 263 },
+            { "Ju": 60, "Hu": 276 },
+            { "Ju": 30, "Hu": 290 },
+            { "Ju": 50, "Hu": 304 },
+            { "Ju": 60, "Hu": 318 },
+            { "Ju": 60, "Hu": 332 },
+            { "Ju": 50, "Hu": 346 },
+            { "Ju": 50, "Hu": 360 }
         ];
         const n = lookup.length;
         const span = 360 / (n - 1);

@@ -43,11 +43,12 @@ describe('Color Analysis Functions', () => {
 
     test('find_strongest_Mu to return highest Mu a range of colors', () => {
         const search_largest_Mu_data = [
-            { ucs: { Ju: 65, Mu: 10, Hu: 290},  Mu: 31.152 },
-            { ucs: { Ju: 85, Mu: 10, Hu: 156},  Mu: 49.511 },
-            { ucs: { Ju: 15, Mu: 10, Hu: 313},  Mu: 29.199 },
-            { ucs: { Ju: 100, Mu: 10, Hu: 156}, Mu: 1.855 },
-            { ucs: { Ju: 0, Mu: 10, Hu: 156},   Mu: 0.488 },
+            { ucs: { Ju: 65, Mu: 10, Hu: 290},  Mu: 31.119 },
+            { ucs: { Ju: 85, Mu: 10, Hu: 156},  Mu: 46.9082 },
+            { ucs: { Ju: 15, Mu: 10, Hu: 313},  Mu: 29.1914 },
+            { ucs: { Ju: 100, Mu: 10, Hu: 156}, Mu: 1.8359 },
+            { ucs: { Ju: 0, Mu: 10, Hu: 156},   Mu: 0.4589 },
+            { ucs: { Ju: 50, Mu: 10, Hu: 0},   Mu: 46.9082 },
         ]
         search_largest_Mu_data.forEach( ({ ucs, Mu }) => {
             expect(find_strongest_Mu(ucs)).toBeCloseTo(Mu)
@@ -61,13 +62,13 @@ describe('Color Analysis Functions', () => {
 
     test('find_strongest_Ju to return ideal Ju for the highest chromatic color at a given Hu', () => {
         const search_strongest_Ju_data = [
-            { Hu: 0,  Ju: 59.6 },
-            { Hu: 56,  Ju: 76.2 },
-            { Hu: 112,  Ju: 91.7 },
-            { Hu: 155,  Ju: 85.1 },
-            { Hu: 232,  Ju: 76.1 },
-            { Hu: 292,  Ju: 39.2 },
-            { Hu: 307,  Ju: 45 },
+            { Hu: 0,  Ju: 50 },
+            { Hu: 56,  Ju: 70 },
+            { Hu: 112,  Ju: 90 },
+            { Hu: 155,  Ju: 80 },
+            { Hu: 232,  Ju: 80 },
+            { Hu: 292,  Ju: 30 },
+            { Hu: 307,  Ju: 50 },
         ]
         search_strongest_Ju_data.forEach( ({ Hu, Ju }) => {
             expect(find_strongest_Ju(Hu)).toBeCloseTo(Ju)
@@ -76,13 +77,13 @@ describe('Color Analysis Functions', () => {
 
     test('find_strongest_color to return ucs for the highest chromatic color at a given Hu', () => {
         const search_strongest_ucs_data = [
-            { Hu: 0,  hex: '#ff545a' },
-            { Hu: 56,  hex: '#ffac4b' },
-            { Hu: 112,  hex: '#ffec44' },
-            { Hu: 155,  hex: '#68fd02' },
-            { Hu: 232,  hex: '#03d9e5' },
-            { Hu: 292,  hex: '#474afe' },
-            { Hu: 307,  hex: '#9c2cff' },
+            { Hu: 0,  hex: '#f01a38' },
+            { Hu: 56,  hex: '#f89701' },
+            { Hu: 112,  hex: '#fde702' },
+            { Hu: 155,  hex: '#65ed16' },
+            { Hu: 232,  hex: '#01e4f0' },
+            { Hu: 292,  hex: '#2116ff' },
+            { Hu: 307,  hex: '#a64afe' },
         ]
         search_strongest_ucs_data.forEach( ({ Hu, hex }) => {
             expect(find_strongest_color(Hu).hex).toEqual(hex)

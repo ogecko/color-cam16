@@ -26,7 +26,7 @@ describe('Color Language Parser Functions', () => {
         const definitions = [
             { text: 'testcase #ff0000', result: { hexLabel2: "52J102" } },
             { text: 'testcase hmj(0,40,50)', result: { hexLabel2: "50I80" } },
-            { text: 'testcase hmj(0,100,50)', result: { hexLabel2: "50I97" } },
+            { text: 'testcase hmj(0,100,50)', result: { hexLabel2: "50I94" } },
             { text: 'testcase hmj(270,20,50) darker by 21', result: { hexLabel2: "29v40" } },
         ]
         definitions.forEach(({ text, result }) => {

@@ -8,11 +8,11 @@ import { JuMuHu_to_hex, JuMuHu_to_color } from "./transform_rev"
  * If it cant find the max Mu after 13 iterations it will return 0
  * @param  {JuMuHu} ucs - starting color object (note Mu is ignored, only uses Ju: lightness [0..100], Hu: hue angle [0-360])
  * @param  {number} min (default=0) - optional known good Mu
- * @param  {number} max (default=100) - optional known out of gamut Mu
+ * @param  {number} max (default=94) - optional known out of gamut Mu
  * @param  {number} n (default=0) - number of iterations so far
  * @returns number - the maximum Mu for the given Hu and Ju, to an accuracy of +/- 0.1
  */
-export function find_strongest_Mu(ucs: JuMuHu, min: number = 0, max: number = 100, n: number = 0): number {
+export function find_strongest_Mu(ucs: JuMuHu, min: number = 0, max: number = 47, n: number = 0): number {
     if (max - min < 0.1) return min
     if ((n++ > 13) || (n < 0)) return 0
     const half = (max + min) / 2
@@ -41,36 +41,37 @@ function gradient_dMu_dJu(Hu: number, Ju: number): number {
  * @param  {boolean=true} useLookup - use lookup rather than gradient descent
  * @returns number - Ju lightness [0..100]
  */
-export function find_strongest_Ju(Hu: number, min: number = 5, max: number = 95, n: number = 0, useLookup = true): number {
+export function find_strongest_Ju(Hu: number, min: number = 5, max: number = 94, n: number = 0, useLookup = true): number {
     if (useLookup) {
         const lookup = [
-            { "Ju": 59.6, "Hu": 0 },
-            { "Ju": 62.2, "Hu": 14 },
-            { "Ju": 67.9, "Hu": 28 },
-            { "Ju": 72.4, "Hu": 42 },
-            { "Ju": 76.2, "Hu": 55 },
-            { "Ju": 79.9, "Hu": 69 },
-            { "Ju": 83.6, "Hu": 83 },
-            { "Ju": 87.4, "Hu": 97 },
-            { "Ju": 91.7, "Hu": 110 },
-            { "Ju": 94.9, "Hu": 124 },
-            { "Ju": 88.0, "Hu": 138 },
-            { "Ju": 85.1, "Hu": 152 },
-            { "Ju": 61.1, "Hu": 166 },
-            { "Ju": 67.4, "Hu": 180 },
-            { "Ju": 75.1, "Hu": 193 },
-            { "Ju": 81.8, "Hu": 207 },
-            { "Ju": 89.8, "Hu": 221 },
-            { "Ju": 76.1, "Hu": 235 },
-            { "Ju": 67.1, "Hu": 249 },
-            { "Ju": 58.7, "Hu": 263 },
-            { "Ju": 45.3, "Hu": 276 },
-            { "Ju": 39.2, "Hu": 290 },
-            { "Ju": 45.0, "Hu": 304 },
-            { "Ju": 62.8, "Hu": 318 },
-            { "Ju": 63.0, "Hu": 332 },
-            { "Ju": 63.1, "Hu": 346 },
-            { "Ju": 59.6, "Hu": 360 }
+
+            { "Ju": 50, "Hu": 0 },
+            { "Ju": 50, "Hu": 14 },
+            { "Ju": 60, "Hu": 28 },
+            { "Ju": 60, "Hu": 42 },
+            { "Ju": 70, "Hu": 55 },
+            { "Ju": 70, "Hu": 69 },
+            { "Ju": 80, "Hu": 83 },
+            { "Ju": 80, "Hu": 97 },
+            { "Ju": 90, "Hu": 110 },
+            { "Ju": 90, "Hu": 124 },
+            { "Ju": 90, "Hu": 138 },
+            { "Ju": 80, "Hu": 152 },
+            { "Ju": 70, "Hu": 166 },
+            { "Ju": 70, "Hu": 180 },
+            { "Ju": 80, "Hu": 193 },
+            { "Ju": 80, "Hu": 207 },
+            { "Ju": 80, "Hu": 221 },
+            { "Ju": 80, "Hu": 235 },
+            { "Ju": 70, "Hu": 249 },
+            { "Ju": 60, "Hu": 263 },
+            { "Ju": 60, "Hu": 276 },
+            { "Ju": 30, "Hu": 290 },
+            { "Ju": 50, "Hu": 304 },
+            { "Ju": 60, "Hu": 318 },
+            { "Ju": 60, "Hu": 332 },
+            { "Ju": 50, "Hu": 346 },
+            { "Ju": 50, "Hu": 360 }
         ]
         const n = lookup.length
         const span = 360 / (n - 1)
