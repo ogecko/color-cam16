@@ -4,11 +4,12 @@ import { createWriteStream } from 'fs'
 
 console.log('Generate Color Names data')
 
+const names0=require('./winsor-newton.json')
 const names1=require('color-name-list/dist/colornames.bestof.json')
 const names2=require('color-name-list/dist/colornames.json')
 
 const data=[]
-const src = [names1, names2]
+const src = [names0,names1, names2]
 src.forEach(d => d.forEach(x => {
     data.push(
         {
@@ -26,7 +27,8 @@ console.log(results)
 
 const file = createWriteStream('dist/color-names.js')
 file.on('error', err => console.log(err))
-file.write(`export const colorNames = {\n`);
-sortBy(results, x => x.label).forEach(x => file.write(`  '${x.label}': '${x.name}',\n`))
+file.write(`const colorNames = {\n`);
+sortBy(results, x => x.label).forEach(x => file.write(`  "${x.label}": "${x.name}",\n`))
 file.write(`}\n`);
+file.write(`exports.colorNames = colorNames\n`);
 file.end();
